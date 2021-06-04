@@ -21,9 +21,6 @@ import com.example.authscreenwithcompose.ui.theme.AuthScreenWithComposeTheme
 
 class MainActivity : ComponentActivity() {
 
-    private lateinit var emailState: MutableState<String>
-    private lateinit var passwordState: MutableState<String>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
