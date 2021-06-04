@@ -6,12 +6,17 @@ import androidx.activity.compose.setContent
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.authscreenwithcompose.ui.theme.AuthScreenWithComposeTheme
@@ -25,12 +30,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val scaffoldState = rememberScaffoldState()
-            emailState = remember {
-                mutableStateOf("")
-            }
-            passwordState = remember {
-                mutableStateOf("")
-            }
             AuthScreenWithComposeTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
@@ -38,7 +37,7 @@ class MainActivity : ComponentActivity() {
                         scaffoldState = scaffoldState,
                         modifier = Modifier.fillMaxSize()
                     ) {
-                        MainLoginScreen(emailState.value, passwordState.value)
+                        MainLoginScreen()
                     }
                 }
             }
@@ -47,7 +46,7 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainLoginScreen(emailState: String = "", passwordState: String = "") {
+fun MainLoginScreen() {
     val rotation by rememberInfiniteTransition().animateFloat(
         initialValue = 0f,
         targetValue = 360f,
@@ -59,6 +58,13 @@ fun MainLoginScreen(emailState: String = "", passwordState: String = "") {
             repeatMode = RepeatMode.Restart
         )
     )
+    var emailState by remember {
+        mutableStateOf("")
+    }
+    var passwordState by remember {
+        mutableStateOf("")
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -87,9 +93,14 @@ fun MainLoginScreen(emailState: String = "", passwordState: String = "") {
             modifier = Modifier.fillMaxWidth(),
             value = emailState,
             label = {
-                Text(text = "example@gmail.com")
+                Text(text = "Email")
             },
-            onValueChange = { }
+            onValueChange = {
+                emailState = it
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email
+            )
         )
         Spacer(
             modifier = Modifier
@@ -101,7 +112,13 @@ fun MainLoginScreen(emailState: String = "", passwordState: String = "") {
             label = {
                 Text(text = "Password")
             },
-            onValueChange = { }
+            onValueChange = {
+                passwordState = it
+            },
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password
+            ),
+            visualTransformation = PasswordVisualTransformation()
         )
         Spacer(
             modifier = Modifier
